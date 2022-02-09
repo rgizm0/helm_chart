@@ -1,0 +1,26 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+ name: dremio-query-analyzer
+spec:
+ schedule: "10 */2 * * *"
+ jobTemplate:
+   spec:
+     template:
+       spec:
+         containers:
+         - name: dremio-query-analyzer
+           image: chufedremio/dremioqueryanalyser
+           imagePullPolicy: Always
+           env:
+             - name: DREMIO_USERNAME
+               value: "dremio"
+             - name: DREMIO_PASSWORD
+               value: "yourpass"
+             - name: AWS_ACCESS_KEY_ID
+               value: KEY
+             - name: AWS_SECRET_ACCESS_KEY
+               value: KEY
+             - name: DREMIO_STORAGE_PATH
+               value: s3://dremio-carsten-data/queryanalyzer
+         restartPolicy: OnFailure
